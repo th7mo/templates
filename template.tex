@@ -1,0 +1,162 @@
+\documentclass[11pt, a4paper]{article}
+
+% margins around page
+\usepackage[left=1in, right=1in, top=1in, bottom=1in]{geometry}
+
+% colors
+\usepackage{xcolor}
+\definecolor{accentcolor}{HTML}{$if(accent-color)$$accent-color$$else$000000$endif$} % Adjust the hex value as needed
+
+% font
+\usepackage[default]{sourcesanspro}
+\usepackage{sourcecodepro}
+
+% vertical line height
+\usepackage{setspace}  % Required for adjusting line spacing
+\setstretch{1.15}  % Adjust the line spacing between lines inside paragraphs
+
+\usepackage{titlesec}
+\usepackage[hidelinks]{hyperref}  % Use hidelinks option to remove colored boxes
+
+$if(numbersections)$
+    \setcounter{secnumdepth}{5}
+$else$
+    \setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+$endif$
+
+$if(heading-on-new-page)$
+    \providecommand{\tightlist}{%
+        \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+    \newcommand{\sectionbreak}{\clearpage}
+$else$
+    \providecommand{\tightlist}
+$endif$
+
+% paragraph spacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{10pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+
+
+
+% custom heading sizes
+\titleformat{\section}{\normalfont\fontsize{18}{20}\fontseries{b}\selectfont\MakeUppercase}{\thesection}{1em}{}  % Modified \titleformat
+\titleformat{\subsection}{\normalfont\fontsize{14}{16}\bfseries\color{accentcolor}}{\thesubsection}{1em}{}
+
+% custom margin below headings
+\titlespacing*{\section}{0pt}{0.15\baselineskip}{0.15\baselineskip}  % Adjust spacing for sections (Heading 1)
+\titlespacing*{\subsection}{0pt}{0.05\baselineskip}{0.05\baselineskip}  % Adjust spacing for subsections (Heading 2)
+\titlespacing*{\subsubsection}{0pt}{0.05\baselineskip}{0.05\baselineskip}  % Adjust spacing for subsections (Heading 3)
+\titlespacing*{\subsubsubsection}{0pt}{0.05\baselineskip}{0.05\baselineskip}  % Adjust spacing for subsections (Heading 4)
+\titlespacing*{\subsubsubsubsection}{0pt}{0.05\baselineskip}{0.05\baselineskip}  % Adjust spacing for subsections (Heading 5)
+
+% images
+\usepackage{graphicx}
+\makeatletter
+    \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+    \def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+
+% required otherwise images are floating all over the place
+% Make use of float-package and set default placement for figures to H.
+% The option H means 'PUT IT HERE' (as  opposed to the standard h option which means 'You may put it here if you like').
+\usepackage{float}
+\floatplacement{figure}{$if(float-placement-figure)$$float-placement-figure$$else$H$endif$}
+
+% blockquote
+$if(accent-color)$
+    \definecolor{blockquote-border}{HTML}{$accent-color$}
+    \definecolor{blockquote-text}{HTML}{$accent-color$}
+$else$
+    \definecolor{blockquote-border}{RGB}{221,221,221}
+    \definecolor{blockquote-text}{RGB}{119,119,119}
+$endif$
+
+\usepackage{mdframed}
+\newmdenv[rightline=false,bottomline=false,topline=false,linewidth=3pt,linecolor=blockquote-border,skipabove=\parskip]{customblockquote}
+\renewenvironment{quote}{\begin{customblockquote}\list{}{\rightmargin=0em\leftmargin=0em}%
+\item\relax\color{blockquote-text}\ignorespaces}{\unskip\unskip\endlist\end{customblockquote}}
+
+% caption config
+\usepackage{caption}
+\DeclareCaptionFormat{myformat}{\itshape#1#2#3\par} % make italic
+\captionsetup{format=myformat,justification=raggedright,singlelinecheck=false} % align left
+
+% header config
+$if(header-and-footer)$
+    \usepackage{fancyhdr}
+    \pagestyle{fancy}
+    \fancyhf{}
+    \rhead{\thepage}
+    $if(title)$
+        \lfoot{$title$}
+    $endif$
+    $if(date)$
+        \cfoot{\today}
+    $endif$
+    $if(author)$
+        \rfoot{$author$}
+    $endif$
+
+    % make header and footer line invisible
+    \renewcommand{\headrulewidth}{0pt}
+$endif$
+
+\usepackage{enumitem}
+\setlist{nosep}  % No space between list items
+
+
+\definecolor{covercolor}{HTML}{$if(cover-color)$$cover-color$$else$FFFFFF$endif$}
+
+
+\begin{document}
+    \raggedright % Prevents word breaking at the end of lines
+
+    % Front cover
+    $if(cover-page)$
+        \thispagestyle{empty} % Hide page number on the table of contents page
+        \vspace*{\fill}
+        {\Huge\bfseries\color{accentcolor}\MakeUppercase{$title$}}  % Title from your main document
+
+        {\Large\bfseries\MakeUppercase{$subtitle$}}  % Subtitle from your main document
+        \vspace*{4em}
+
+        \begin{tabular}{ll}
+            $if(author)$
+                \textbf{Naam:} & $author$ \\
+            $endif$
+            $if(email)$
+                \textbf{Email:} & $email$ \\
+            $endif$
+            $if(organisation)$
+                \textbf{Organisatie:} & $organisation$ \\
+            $endif$
+            \textbf{Datum:} & \today \\
+            $if(version)$
+                \textbf{Versie:} & $version$ \\
+            $endif$
+        \end{tabular}
+
+    $endif$
+
+    % Adjust settings for table of contents
+    $if(toc)$
+        \thispagestyle{empty}
+        \begin{spacing}{1.2} % Adjust the spacing as needed
+            \setlength{\parskip}{0pt} % No additional space between paragraphs
+            \setcounter{tocdepth}{$toc-depth$}
+            \thispagestyle{empty} % Hide page number on the table of contents page
+            \tableofcontents
+            \newpage
+        \end{spacing} % Restore original spacing after table of contents
+    $endif$
+
+    \pagenumbering{arabic}
+    $body$
+
+\end{document}
